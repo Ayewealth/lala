@@ -7,13 +7,17 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import Animated, { FadeInLeft, FadeOutRight } from "react-native-reanimated";
 import { Link, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { AuthContext } from "@/context/AuthContext";
+import { jwtDecode } from "jwt-decode";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const login = () => {
   const [email, setEmail] = useState("");
@@ -21,7 +25,50 @@ const login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const { setUser, setAuthToken, setIsAuthenticated } = useContext(AuthContext);
+
   const router = useRouter();
+
+  const handleLogin = async () => {
+    setLoading(true);
+
+    try {
+      let response = await fetch(
+        "https://lala-voice.onrender.com/api/signin/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        const decode = jwtDecode(data.access);
+        setAuthToken(data);
+        setUser(decode);
+        setIsAuthenticated(true);
+        await AsyncStorage.setItem("authToken", JSON.stringify(data));
+        await AsyncStorage.setItem("decodedAccess", JSON.stringify(decode));
+        await AsyncStorage.setItem("isAuthenticated", JSON.stringify(true));
+        router.replace("/(app)/");
+      } else {
+        alert(data.detail);
+        console.log(data);
+      }
+    } catch (error) {
+      console.log("Error", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -112,27 +159,26 @@ const login = () => {
               </Link>
             </View>
 
-            <Link href="/(app)/" asChild>
-              <TouchableOpacity
+            <TouchableOpacity
+              onPress={handleLogin}
+              style={{
+                alignItems: "center",
+                padding: 13,
+                borderRadius: 50,
+                borderWidth: 1,
+                borderColor: "#656161",
+              }}
+            >
+              <Text
                 style={{
-                  alignItems: "center",
-                  padding: 13,
-                  borderRadius: 50,
-                  borderWidth: 1,
-                  borderColor: "#656161",
+                  fontFamily: "PoppinsRegular",
+                  color: "#fff",
+                  fontSize: 15,
                 }}
               >
-                <Text
-                  style={{
-                    fontFamily: "PoppinsRegular",
-                    color: "#fff",
-                    fontSize: 15,
-                  }}
-                >
-                  Login
-                </Text>
-              </TouchableOpacity>
-            </Link>
+                {loading ? <ActivityIndicator color={"white"} /> : "Login"}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           <View

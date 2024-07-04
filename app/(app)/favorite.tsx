@@ -1,18 +1,100 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
+import React, { useContext, useEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
+import { AuthContext } from "@/context/AuthContext";
+import isEqual from "lodash.isequal";
 
 const Favorite = () => {
-  const [savedPhrases, setSavedPhrases] = useState([
-    { id: 1, value: "Hello" },
-    { id: 2, value: "Phrase" },
-    { id: 3, value: "Saved" },
-    { id: 4, value: "Hey" },
-  ]);
+  const [savedPhrases, setSavedPhrases] = useState([]);
 
-  const removePhrase = (id: number) => {
-    setSavedPhrases(savedPhrases.filter((phrase) => phrase.id !== id));
+  const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
+
+  const { authToken } = useContext(AuthContext);
+
+  const getSavedPhrases = async () => {
+    setLoading(true);
+
+    try {
+      let response = await fetch(
+        "https://lala-voice.onrender.com/api/saved-pharse/",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken?.access}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (!isEqual(savedPhrases, data)) {
+          setSavedPhrases(data);
+          console.log("Saved Phrase updated");
+        } else {
+          console.log("Saved Phrase are the same, no update needed");
+        }
+      } else console.log(data);
+    } catch (error) {
+      console.log("Error: " + error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    getSavedPhrases();
+  }, [savedPhrases]);
+
+  const removePhrase = async (id: number) => {
+    setLoading2(true);
+
+    try {
+      let response = await fetch(
+        `https://lala-voice.onrender.com/api/saved-pharse/${id}/`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken?.access}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        console.log("Deleted Saved Phrase");
+        getSavedPhrases();
+      }
+    } catch (error) {
+      console.log("Error: " + error);
+    } finally {
+      setLoading2(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          backgroundColor: "#000",
+        }}
+      >
+        <ActivityIndicator color={"white"} />
+      </View>
+    );
+  }
 
   return (
     <View
@@ -54,17 +136,32 @@ const Favorite = () => {
                     width: "100%",
                   }}
                 >
-                  <Text
-                    style={{
-                      fontFamily: "PoppinsRegular",
-                      fontSize: 16,
-                      color: "#fff",
-                    }}
-                  >
-                    {item.value}
-                  </Text>
+                  <View style={{ flexDirection: "column", gap: 5 }}>
+                    <Text
+                      style={{
+                        fontFamily: "PoppinsRegular",
+                        fontSize: 16,
+                        color: "#fff",
+                      }}
+                    >
+                      {item.phrase}
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "PoppinsMedium",
+                        fontSize: 14,
+                        color: "#656161",
+                      }}
+                    >
+                      {item.language}
+                    </Text>
+                  </View>
                   <TouchableOpacity onPress={() => removePhrase(item.id)}>
-                    <AntDesign name="star" size={20} color="#fff" />
+                    {loading2 ? (
+                      <ActivityIndicator color={"white"} />
+                    ) : (
+                      <AntDesign name="star" size={20} color="#fff" />
+                    )}
                   </TouchableOpacity>
                 </View>
               );

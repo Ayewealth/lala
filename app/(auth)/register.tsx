@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -22,7 +23,40 @@ const register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const handleSignup = async () => {
+    setLoading(true);
+
+    try {
+      let response = await fetch("https://lala-voice.onrender.com/api/users/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullname: fullname,
+          email: email,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.status === 201) {
+        alert("Account Created Successfully");
+        router.replace("/(auth)/login");
+      } else {
+        alert("An Error occurred");
+        console.log(data);
+      }
+    } catch (error) {
+      console.log("Error", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const router = useRouter();
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -109,6 +143,7 @@ const register = () => {
             </View>
 
             <TouchableOpacity
+              onPress={handleSignup}
               style={{
                 alignItems: "center",
                 padding: 13,
@@ -124,7 +159,7 @@ const register = () => {
                   fontSize: 15,
                 }}
               >
-                Sign Up
+                {loading ? <ActivityIndicator color={"white"} /> : "Sign Up"}
               </Text>
             </TouchableOpacity>
           </View>

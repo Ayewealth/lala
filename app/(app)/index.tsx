@@ -191,12 +191,14 @@ export default function HomeScreen() {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={onRefresh}
-            style={{ backgroundColor: "#000", padding: 13, borderRadius: 50 }}
-          >
-            <Ionicons name="refresh" size={22} color="#fff" />
-          </TouchableOpacity>
+          <Link href="/(app)/account" asChild>
+            <TouchableOpacity
+              onPress={onRefresh}
+              style={{ backgroundColor: "#000", padding: 13, borderRadius: 50 }}
+            >
+              <AntDesign name="setting" size={22} color="#fff" />
+            </TouchableOpacity>
+          </Link>
         </View>
       </View>
 

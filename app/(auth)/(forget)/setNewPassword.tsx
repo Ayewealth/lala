@@ -6,8 +6,9 @@ import {
   Platform,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Animated, { FadeInLeft, FadeOutRight } from "react-native-reanimated";
 import { StatusBar } from "expo-status-bar";
 import AuthHeader from "@/components/AuthHeader";
@@ -37,9 +38,42 @@ const setNewPassword = () => {
   const togglePasswordVisibility = () => {
     setShowPassword1(!showPassword1);
   };
+
   const handleForgetPassword = async () => {
-    router.replace("/(auth)/(forget)/forgetPasswordSuccessful");
+    setLoading(true);
+    try {
+      const response = await fetch(
+        "https://lala-voice.onrender.com/api/password-reset-confirm/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            otp: resetCode,
+            new_password: password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok || response.status === 200) {
+        router.replace("/(auth)/(forget)/forgetPasswordSuccessful");
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      alert(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    getEmail();
+  }, []);
 
   return (
     <Animated.View
@@ -120,7 +154,11 @@ const setNewPassword = () => {
                 fontSize: 15,
               }}
             >
-              Update Password
+              {loading ? (
+                <ActivityIndicator color={"white"} />
+              ) : (
+                "Update Password"
+              )}
             </Text>
           </TouchableOpacity>
         </View>

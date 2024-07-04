@@ -6,6 +6,7 @@ import {
   Platform,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,14 +14,44 @@ import AuthHeader from "@/components/AuthHeader";
 import Animated, { FadeInLeft, FadeOutRight } from "react-native-reanimated";
 import { StatusBar } from "expo-status-bar";
 import { Link, useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const forgetPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+
   const handleForgetPassword = async () => {
-    router.replace("/(auth)/(forget)/setNewPassword");
+    setLoading(true);
+    try {
+      const response = await fetch(
+        "https://lala-voice.onrender.com/api/password-reset/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok || response.status === 200) {
+        await AsyncStorage.setItem("forgetEmail", email);
+        router.replace("/(auth)/(forget)/setNewPassword");
+      } else {
+        alert(data.email);
+        console.log(data);
+      }
+    } catch (error) {
+      alert(error);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <Animated.View
@@ -83,7 +114,11 @@ const forgetPassword = () => {
                   fontSize: 15,
                 }}
               >
-                Send Reset Mail
+                {loading ? (
+                  <ActivityIndicator color={"white"} />
+                ) : (
+                  "Send Reset Mail"
+                )}
               </Text>
             </TouchableOpacity>
 
