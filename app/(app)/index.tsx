@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
   Modal,
   View,
@@ -28,6 +28,7 @@ import { translate } from "google-translate-api-x";
 import * as Clipboard from "expo-clipboard";
 import Languages from "@/utils/language";
 import * as Speech from "expo-speech";
+import { AuthContext } from "@/context/AuthContext";
 
 export default function HomeScreen() {
   const [fromLanguage, setFromLanguage] = useState("English");
@@ -44,6 +45,8 @@ export default function HomeScreen() {
   const [recording, setRecording] = useState();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
   const [isSpeaking, setIsSpeaking] = useState(false);
+
+  const { authToken, userDetails } = useContext(AuthContext);
 
   const openModal = (type: "from" | "to") => {
     setCurrentLanguageType(type);
@@ -134,6 +137,31 @@ export default function HomeScreen() {
       console.error("Speech error", error);
     } finally {
       setIsSpeaking(false);
+    }
+  };
+
+  const savePhrase = async () => {
+    let response = await fetch(
+      "https://lala-voice.onrender.com/api/saved-pharse/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken?.access}`,
+        },
+        body: JSON.stringify({
+          user: userDetails && userDetails[0]?.user?.id,
+          phrase: word,
+          language: translatedText,
+        }),
+      }
+    );
+
+    const data = await response.json();
+    if (response.status === 201) {
+      alert("Phrase Saved Successfully");
+    } else {
+      console.log(data);
     }
   };
 
@@ -250,7 +278,8 @@ export default function HomeScreen() {
                   <TouchableWithoutFeedback onPress={copyToClipboard}>
                     <Ionicons name="copy-outline" size={22} color="#3572EF" />
                   </TouchableWithoutFeedback>
-                  <TouchableWithoutFeedback>
+
+                  <TouchableWithoutFeedback onPress={savePhrase}>
                     <AntDesign name="staro" size={22} color="#3572EF" />
                   </TouchableWithoutFeedback>
                 </View>
