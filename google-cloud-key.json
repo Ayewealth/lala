@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "lala-voice",
+  "private_key_id": "fe9c9d55313c93d898da116dac04e54011425df7",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCvK7w8wRu0zf0F\nhgzDX6DYpQFsMabiIRYNNBoQFsL4oCCmCUW3mbniS4OEEeuNNoHvO1tCD0lCBpLR\nWWVLUFpjNG0Fzy3WMbUrwoh30hug2Oo+TgtoywuSCr9/KuVEj1B3Ux6Y8+xPXZ6N\n4m9E0k/vU/0BlFGgvH15IFgv8kAQXtR66IIhELuCvd618PrrFd3DXECNVwtkYRjA\ntPWLcun1YWjFR2yrR4A1I81AJ/uKX/QI7fgDwI+YE/g8vH4/iJDUzt7xscdWrXFB\nLisyWGcSvRn5965q7jr0mODPjMfTBnsZbp52LuEsQy2l7UyZ8XsotUFylQhhMJsz\np1a4t/cNAgMBAAECggEAE75jd1qRr6GXDvgSuLOu2rRQcnwvMeYmSOMyO9WA8MqF\nm4lIgx7v0WaPAoQNj2tRHmCLkujLqkY45qFDlkdOhMd8MU8ufKm6IJ5KyOyU4h6I\n2nBr/0oBehq9hk0UrdNUb7qd5IH7xN9Jt3bJ8VEeItzN089+mtYb81rWrcLJfz6t\nQtsSwHeZb7KKr729gU7KnJV4fBu/78lm0byh97jMsOClwjyaNoWBerl9XhkwYvqh\nLGA2LP4xby3knDYeKGEVWvXuxBY4fWhpBQXHoazYoo35q2RzNzV2VvJDFyg4yZz7\nnsS8k1UhJ4E/ciNFMp4jS9gXRWQEuJDzjZgisKXNKQKBgQDbOOQXNV30UHTc29EI\n5F5fC/af6VPeSIMR1gPGbL4VoS1BwrsOFb/N2GW6e9OBnvpbHfShplgM2LHHuEKA\nxeyWj87Q2Ir90AZGY3Z1lgdntVws20kY9+jU7Hjzv+BCaLG7+8wiPZZa/tF471Fy\nepLZ7Y/aKkBgkU8z8ItlaSoEFQKBgQDMju9Mo1cmNvS3tjA5uqt4z89LEhdT1h4j\nXXWTggpWy+D0Ueh/S7H14f1coDc+bykvff3QoF6TUWFzopgKv6aTDUVgukm+lCWE\n+cd0nRaZVso/qvw6b3ilxvMJJQL3JZj3/vW6LRUqzyw9BZnkFxen7db2ec07FSCN\nZDv/s2aNGQKBgG9h3nH0SYJihp3YicKs1U4RdAMXt+cOjJm5VT2x7npq4+WvnP6x\nCjz6H+W6GGKZdbZp5+th6wbL6rgA5Lks1uJAuuHdw/DliuqkioF/8s88lFKuL9uh\nygi1BVdDPBxBuVw7uSIEjKo7Ig8B+S3jHU3gp+A+62qlKcrIAutJnXFpAoGANiNq\nQA1G5m1LDUghsVWvRjUxtrueAuk7Zr64fIbBN8GT0vXOo8oj2mCqTpZ0qIiBDPm6\ncDnRbgnu0czpkoawjmDHyNbk55SL7Yqx+DIPJhwrQPh+8vRHqRBjiDsMct63goMv\nA8wkuwTDv4648P4Pm7k92FPaNlXcHK+3lXAkpxkCgYBk8Twwcnf4VGBTsw9su6pv\n55njUY0y3p4rIqoXgCDClPRc7ZKBEEL1BtuC7gtqGsEWMXKcdzHOcQogE8aMxIPL\nnIkwXk0rTp1VU06sIZly5WpnOqVhiJ1JMH4YQzel3hsoAgH990+0UoH+azS9zOjJ\nPWc5VimRPVMzuIsIGM4UDg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "speech-to-text@lala-voice.iam.gserviceaccount.com",
+  "client_id": "100391605585211627879",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/speech-to-text%40lala-voice.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
